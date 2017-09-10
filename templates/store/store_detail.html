@@ -1,0 +1,97 @@
+{% extends 'profile_base.html' %}
+{% load qr_tags %}
+{% load staticfiles %}
+{% block title_block %}Store | {{ store.name }}{% endblock %}
+{% block content_wrapper %}
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+		
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{ store.name }}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-3 col-lg-3 " align="center">
+					{% if store.stand_alone %}
+					    {% if store.picture %}
+							<img src="{{ store.picture.url }}" class="img img-responsive img-circle store-pro-pic">
+						{% else %}
+							<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
+						{% endif %}
+					{% else %}
+						{% if store.franchise.picture %}
+							<img src="{{ store.franchise.picture.url }}" class="img img-responsive img-circle store-pro-pic">
+						{% else %}
+							<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
+						{% endif %}
+					{% endif %}
+					</div>
+					{{ store.category.name }}
+					<div class=" col-md-9 col-lg-9 ">
+						<table class="table table-user-information">
+							<tbody>
+								<tr>
+									<td>About</td>
+									<td>{{ store.description }}</a></td>
+								</tr>
+								<tr>
+									<td>Date Joined:</td>
+									<td>{{ store.user.date_joined.date }}</td>
+								</tr>
+								<tr>
+									<td>Address</td>
+									<td>{{ store.street }}, {{ store.city }}, <br>
+									{{ store.state }}, {{ store.postal }}</td>
+								</tr>
+								<tr>
+									<td>Email</td>
+									<td><a href="{{ store.user.email }}">{{ store.user.email }}</a></td>
+								</tr>
+								<tr>
+									<td>Phone Number</td>
+									<td><a href="tel:{{ store.phone_no.as_national }}">{{ store.phone_no.as_national }}
+									</td>
+								</tr>
+								{% ifequal request.user store.user %}
+									<tr>
+										<td>Token</td>
+										<td>{{ store.token }}</td>
+									</tr>
+								{% endifequal %}
+							</tbody>
+						</table>
+						
+					</div>
+					<div align="center">
+						<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl={{ store.phone_no.national_number }}" />
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<div>
+					<a href="{% url "change_password" %}"class="btn btn-sm btn-primary" title="Change Password"><i class="fa fa-key"></i> Change Password</a>
+					<span class="pull-right">
+						<a href="{% url "auth_logout" %}?next={% url "index" %}" class="btn btn-sm btn-danger" title="Logout"><i class="fa fa-sign-out"> Logout</i></a>
+					</span>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<script>
+	function initMap() {
+	var uluru = {lat: {{ store.get_lat }}, lng: {{ store.get_long }}};
+	var map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 15,
+	center: uluru
+	});
+	var marker = new google.maps.Marker({
+	position: uluru,
+	map: map
+	});
+	}
+	</script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUNx_eCDfwvfIm-CkW951UpKbO8VW-34I&callback=initMap">
+	</script>
+{% endblock %}

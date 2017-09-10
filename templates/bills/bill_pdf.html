@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bill #{{ bill.bill_no }}</title>
+		<style type="text/css">
+			table, td {
+				border: 1px solid black;
+				padding: 3px;
+				font-size: 12px;
+			}
+			th{
+				text-align: center;
+				background-color: #00FF8C;
+				font-size: 15px;
+				color: grey;
+			}
+			h1{
+				font-size: 30px;
+			}
+			h3{
+				font-size: 20px;
+			}
+			pre{
+				font-size: 15px;
+			}
+		</style>
+	</head>
+	<body>
+		{% if not user %}
+			<h4 align="right"><a href="http://www.mobbills.com/accounts/register">Login/Register</a>
+		{% endif %}
+		<h1><a href="http://www.mobbills.com">MobBills</a></h1>
+		<h1 align="center">Invoice</h1>
+		<div class="invoice-title">
+		{% if customer %}
+			<h4 align="right">Billed To:</h4>
+		    <h3 align="right">{{ customer.get_full_name }}</h3>
+		{% endif %}	
+		</div>
+		<hr>
+		<div class="col-xs-6 text-right">
+			<address>
+				<h3><strong>Store:</strong></h3>
+				<pre><strong>{{ bill.store.name }}</strong>
+{{ bill.store.street }}
+{{ bill.store.city }}
+{{ bill.store.state }} {{ bill.store.postal }}</pre>
+			</address>
+		</div>
+		
+		<div class="col-xs-6 text-right">
+			<p align="right" style="font-size:15px;"><strong>Order Date:</strong><br>
+				{{ bill.date.date }}</p><br><br>
+		</div>
+		<div class="card">
+		<table>
+			<thead>
+				<tr>
+					<th><strong>Item</strong></th>
+					<th ><strong>Price</strong></th>
+					<th><strong>Quantity</strong></th>
+					<th><strong>Total</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in bill.items.all %}
+					<tr>
+						<td>{{ item.product.name }}</td>
+						<td>{{ item.price }}</td>
+						<td>{{ item.quantity }}</td>
+						<td>{{ item.total }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<br>
+		<br>
+		<br>
+		<br>
+		<table>
+			<tbody>
+				<tr>
+					<td><strong>Sale Value</strong></td>
+					<td>{{ bill.sale_value }}</td>
+				</tr>
+				<tr>
+					<td><strong>Tax amount</strong></td>
+					<td>{{ bill.tax_amount }}</td>
+				</tr>
+				<tr>
+					<td><strong>Total</strong></td>
+					<td>{{ bill.total }}</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</body>
+</html>
