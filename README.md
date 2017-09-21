@@ -1,6 +1,7 @@
 # GoGreen
 
-![GoGreen](/static/img/logo.PNG)
+<img alt="GoGreen Logo" src="/static/img/logo.PNG" height=50px />
+<img alt="GoGreen demo screenshot" src="gogreen-screenshot.png" height=500px />
 
 GoGreen is a billing system written in Python and Django.
 
